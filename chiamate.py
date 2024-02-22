@@ -1,7 +1,7 @@
 import requests
 import time
 import threading
-import thread
+from threading  import Thread
 import multiprocessing
 from queue import Queue
 siti_web = [
@@ -50,17 +50,17 @@ def effettua_request(url):
         print("Errore durante la richiesta:", e)
 
 def worker(queue):
-    while True:
+    while not queue.empty():
         a=queue.get()
         effettua_request(a)
         queue.task_done()
 
 if __name__=="__main__":
-    # start_time=time.time()
-    # for url in  siti_web:
-    #     effettua_request(url)
-    # end_time=time.time()
-    # print("Tempo seriale:",end_time-start_time)    
+    start_time=time.time()
+    for url in  siti_web:
+        effettua_request(url)
+    end_time=time.time()
+    print("Tempo seriale:",end_time-start_time)    
     
     queue=Queue()
     start_time=time.time()
@@ -69,8 +69,8 @@ if __name__=="__main__":
     process=[Thread(target=worker,args=(queue,)) for _ in range(4)]
     [processes.start() for processes in process]
 
-    [processes.join() for processes in process]
-
+    #[processes.join() for processes in process]
+    queue.join()
     end_time=time.time()
     print("Tempo utilizzando i thread:",end_time-start_time)
 
