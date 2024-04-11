@@ -61,7 +61,7 @@ if __name__=="__main__":
         effettua_request(url)
     end_time=time.time()
     print("Tempo seriale:",end_time-start_time)    
-    
+    a
     queue=Queue()
     start_time=time.time()
     for url in (siti_web):
